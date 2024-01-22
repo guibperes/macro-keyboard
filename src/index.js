@@ -1,31 +1,9 @@
-import { exec } from "node:child_process";
-import { ByteLengthParser, SerialPort } from "serialport";
-import config from "./config.json" assert { type: "json" };
+import { getByteParser, getSerialPort } from "./serial.js";
+import { getMappedCommands, runByteCommand } from "./commands.js";
 
-const executeProcess = (command, buttonByte) => {
-  console.log(`Executing command in button ${buttonByte}: ${command}`);
-  exec(command).unref();
-};
+const actions = getMappedCommands();
+const port = getSerialPort();
 
-const runByteCommand = (data) => {
-  const actionNumber = Number.parseInt(data.toString("hex"), 16);
-  const commandFunction = ACTIONS[actionNumber];
-
-  if (commandFunction) commandFunction();
-};
-
-const ACTIONS = config.commands.map((command, buttonByte) =>
-  command === config.disabledString
-    ? () => console.log(`Disabled command in button ${buttonByte}`)
-    : () => executeProcess(command, buttonByte)
-);
-
-const port = new SerialPort({
-  autoOpen: false,
-  path: config.serialPort,
-  baudRate: config.baudRate,
-});
-
-port.pipe(new ByteLengthParser({ length: 1 }));
-port.on("data", runByteCommand);
+port.pipe(getByteParser());
+port.on("data", runByteCommand(actions));
 port.open(() => console.log("Connected on serial device"));
