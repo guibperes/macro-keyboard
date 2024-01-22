@@ -11,3 +11,6 @@ export const getSerialPort = () =>
   });
 
 export const getByteParser = () => new ByteLengthParser({ length: 2 });
+
+export const onOpen = () =>
+  console.log(`Connected on serial device ${config.serialPort}`);

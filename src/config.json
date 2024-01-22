@@ -3,7 +3,7 @@
   "baudRate": 9600,
   "disabledString": "DISABLED",
   "buttonCommands": [
-    "DISABLED",
+    "kitty",
     "librewolf",
     "playerctl previous",
     "playerctl play-pause",
