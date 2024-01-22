@@ -1,0 +1,10 @@
+{
+  "serialPort": "/dev/ttyACM0",
+  "baudRate": 9600,
+  "commands": [
+    "echo \"Testando\" > teste.txt",
+    "librewolf",
+    "playerctl previous",
+    "playerctl play-pause"
+  ]
+}

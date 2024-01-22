@@ -1,5 +1,6 @@
 import { exec } from "node:child_process";
 import { ByteLengthParser, SerialPort } from "serialport";
+import config from "./config.json" assert { type: "json" };
 
 const executeProcess = (command, { unref } = { unref: true }) => {
   console.log(`Executing command: ${command}`);
@@ -10,21 +11,17 @@ const executeProcess = (command, { unref } = { unref: true }) => {
 
 const runByteCommand = (data) => {
   const actionNumber = Number.parseInt(data.toString("hex"), 16);
-  ACTIONS[actionNumber]();
+  const commandFunction = ACTIONS[actionNumber];
+
+  if (commandFunction) commandFunction();
 };
 
-const ACTIONS = [
-  () => executeProcess('echo "Testando" > teste.txt'),
-  () => executeProcess("librewolf"),
-  () => executeProcess("playerctl previous"),
-  () => executeProcess("playerctl play-pause"),
-  () => executeProcess("playerctl next"),
-];
+const ACTIONS = config.commands.map((command) => () => executeProcess(command));
 
 const port = new SerialPort({
-  path: "/dev/ttyACM0",
-  baudRate: 9600,
   autoOpen: false,
+  path: config.serialPort,
+  baudRate: config.baudRate,
 });
 
 port.pipe(new ByteLengthParser({ length: 1 }));
