@@ -16,9 +16,15 @@ const ACTIONS = {
   11: () => executeProcess("playerctl next"),
 };
 
-const port = new SerialPort({ path: "/dev/ttyACM0", baudRate: 9600 });
+const port = new SerialPort({
+  path: "/dev/ttyACM0",
+  baudRate: 9600,
+  autoOpen: false,
+});
 
 port.on("data", (data) => {
   const actionNumber = Number.parseInt(Buffer.from(data).toString("hex"), 16);
   ACTIONS[actionNumber]();
 });
+
+port.open(() => console.log("Connected on serial device"));
