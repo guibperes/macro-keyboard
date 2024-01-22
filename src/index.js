@@ -1,5 +1,5 @@
 import { exec } from "node:child_process";
-import { SerialPort } from "serialport";
+import { ByteLengthParser, SerialPort } from "serialport";
 
 const executeProcess = (command, { unref } = { unref: true }) => {
   console.log(`Executing command: ${command}`);
@@ -22,8 +22,10 @@ const port = new SerialPort({
   autoOpen: false,
 });
 
+port.pipe(new ByteLengthParser({ length: 1 }));
+
 port.on("data", (data) => {
-  const actionNumber = Number.parseInt(Buffer.from(data).toString("hex"), 16);
+  const actionNumber = Number.parseInt(data.toString("hex"), 16);
   ACTIONS[actionNumber]();
 });
 
