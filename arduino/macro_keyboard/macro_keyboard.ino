@@ -31,6 +31,12 @@ bool check_input_last_millis(input input_device, long millis_timeout) {
   return millis() - input_device.last_millis >= millis_timeout;
 }
 
+void write_bytes_serial(input input_device, input_action action) {
+  Serial.write(input_device.type);
+  Serial.write(input_device.number);
+  Serial.write(action);
+}
+
 void button_input_setup() {
   for (byte i = 0; i < BUTTON_QUANTITY; i++) {
     byte pin = BUTTON_FIRST_PIN + i;
@@ -51,10 +57,7 @@ void button_input_loop() {
 
     if (!check_input_last_millis(buttons[i], BUTTON_PRESS_TIME) || buttons[i].last_read == HIGH) continue;
 
-    Serial.write(buttons[i].type);
-    Serial.write(buttons[i].number);
-    Serial.write(BUTTON_PUSH);
-
+    write_bytes_serial(buttons[i], BUTTON_PUSH);
     buttons[i].last_millis = millis();
   }
 }
@@ -90,15 +93,11 @@ void knob_input_loop() {
 
     switch (compare_analog_value(analogs[i].last_read, analog_read)) {
       case 0:
-        Serial.write(analogs[i].type);
-        Serial.write(analogs[i].number);
-        Serial.write(KNOB_PREV);
+        write_bytes_serial(analogs[i], KNOB_PREV);
         break;
 
       case 2:
-        Serial.write(analogs[i].type);
-        Serial.write(analogs[i].number);
-        Serial.write(KNOB_NEXT);
+        write_bytes_serial(analogs[i], KNOB_NEXT);
         break;
     }
 
