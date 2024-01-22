@@ -8,13 +8,13 @@ const executeProcess = (command, { unref } = { unref: true }) => {
   if (unref) subprocess.unref();
 };
 
-const ACTIONS = {
-  0: () => executeProcess('echo "Testando" > teste.txt'),
-  1: () => executeProcess("librewolf"),
-  2: () => executeProcess("playerctl previous"),
-  3: () => executeProcess("playerctl play-pause"),
-  4: () => executeProcess("playerctl next"),
-};
+const ACTIONS = [
+  () => executeProcess('echo "Testando" > teste.txt'),
+  () => executeProcess("librewolf"),
+  () => executeProcess("playerctl previous"),
+  () => executeProcess("playerctl play-pause"),
+  () => executeProcess("playerctl next"),
+];
 
 const port = new SerialPort({
   path: "/dev/ttyACM0",
