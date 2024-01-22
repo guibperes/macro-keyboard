@@ -50,11 +50,11 @@ void knob_input_loop() {
     if (analog_read_diff < KNOB_READ_DELAY) continue;
 
     switch (compare_analog_value(analogs[i].last_read, analog_read)) {
-      case 0:
+      case KNOB_LOWER:
         write_bytes_serial(analogs[i], KNOB_PREV);
         break;
 
-      case 2:
+      case KNOB_HIGHER:
         write_bytes_serial(analogs[i], KNOB_NEXT);
         break;
     }
