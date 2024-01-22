@@ -2,9 +2,13 @@
 #define BUTTON_QUANTITY 5
 #define BUTTON_PRESS_TIME 200
 
+#define BUTTON_TYPE 0
+#define KNOB_TYPE 1
+
 struct button {
   byte pin;
   byte number;
+  byte type;
   long last_press;
 };
 
@@ -22,6 +26,7 @@ void setup() {
 
     buttons[i].pin = pin;
     buttons[i].number = i;
+    buttons[i].type = BUTTON_TYPE;
     buttons[i].last_press = BUTTON_PRESS_TIME;
 
     pinMode(pin, INPUT_PULLUP);
@@ -34,6 +39,7 @@ void loop() {
 
     if (check_button_last_press(buttons[i]) && button_state == LOW) {
       Serial.write(buttons[i].number);
+      Serial.write(buttons[i].type);
       buttons[i].last_press = millis();
     }
   }

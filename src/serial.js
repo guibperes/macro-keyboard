@@ -10,4 +10,4 @@ export const getSerialPort = () =>
     baudRate: config.baudRate,
   });
 
-export const getByteParser = () => new ByteLengthParser({ length: 1 });
+export const getByteParser = () => new ByteLengthParser({ length: 2 });

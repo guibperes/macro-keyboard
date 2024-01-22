@@ -2,7 +2,7 @@
   "serialPort": "/dev/ttyACM0",
   "baudRate": 9600,
   "disabledString": "DISABLED",
-  "commands": [
+  "buttonCommands": [
     "DISABLED",
     "librewolf",
     "playerctl previous",
