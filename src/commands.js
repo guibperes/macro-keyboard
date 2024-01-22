@@ -1,11 +1,12 @@
 import { exec } from "node:child_process";
+import { homedir } from "node:os";
 import { getConfigs } from "./config.js";
 
 const config = getConfigs();
 
 const executeProcess = ({ command, type, indexByte }) => {
   console.log(`Executing command in ${type} ${indexByte}: ${command}`);
-  exec(command).unref();
+  exec(command, { cwd: homedir() }).unref();
 };
 
 export const getMappedButtonCommands = () =>
