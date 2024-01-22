@@ -27,8 +27,8 @@ struct input {
 input buttons[BUTTON_QUANTITY];
 input analogs[KNOB_QUANTITY];
 
-bool check_input_last_millis(input button, long millis_timeout) {
-  return millis() - button.last_millis >= millis_timeout;
+bool check_input_last_millis(input input_device, long millis_timeout) {
+  return millis() - input_device.last_millis >= millis_timeout;
 }
 
 void button_input_setup() {
