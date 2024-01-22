@@ -42,7 +42,7 @@ byte compare_analog_value(byte first, byte second) {
 
 void knob_input_setup() {
   for (byte i = 0; i < KNOB_QUANTITY; i++) {
-    analogs[i].pin = analog_pins[i];
+    analogs[i].pin = ANALOG_PINS[i];
     analogs[i].number = i;
     analogs[i].type = KNOB_TYPE;
     analogs[i].last_read = mapAnalogRead(analogs[i].pin);
