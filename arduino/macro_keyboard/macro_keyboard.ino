@@ -5,42 +5,50 @@
 #define BUTTON_TYPE 0
 #define KNOB_TYPE 1
 
-struct button {
+struct input {
   byte pin;
   byte number;
   byte type;
-  long last_press;
+  long last_millis;
 };
 
-button buttons[BUTTON_QUANTITY];
+input buttons[BUTTON_QUANTITY];
 
-bool check_button_last_press(button btn) {
-  return millis() - btn.last_press >= BUTTON_PRESS_TIME;
+bool check_button_last_press(input button) {
+  return millis() - button.last_millis >= BUTTON_PRESS_TIME;
 }
 
-void setup() {
-  Serial.begin(9600);
-
+void button_input_setup() {
   for (byte i = 0; i < BUTTON_QUANTITY; i++) {
     byte pin = BUTTON_FIRST_PIN + i;
 
     buttons[i].pin = pin;
     buttons[i].number = i;
     buttons[i].type = BUTTON_TYPE;
-    buttons[i].last_press = BUTTON_PRESS_TIME;
+    buttons[i].last_millis = BUTTON_PRESS_TIME;
 
     pinMode(pin, INPUT_PULLUP);
   }
 }
 
-void loop() {
+void button_input_loop() {
   for (byte i = 0; i < BUTTON_QUANTITY; i++) {
     bool button_state = digitalRead(buttons[i].pin);
 
     if (check_button_last_press(buttons[i]) && button_state == LOW) {
       Serial.write(buttons[i].number);
       Serial.write(buttons[i].type);
-      buttons[i].last_press = millis();
+
+      buttons[i].last_millis = millis();
     }
   }
+}
+
+void setup() {
+  Serial.begin(9600);
+  button_input_setup();
+}
+
+void loop() {
+  button_input_loop();
 }
