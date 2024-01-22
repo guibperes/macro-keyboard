@@ -2,8 +2,6 @@
 #include "button.h"
 #include "knob.h"
 
-static const byte analog_pins[] = { A0, A1, A2, A3, A4, A5 };
-
 input buttons[BUTTON_QUANTITY];
 input analogs[KNOB_QUANTITY];
 
