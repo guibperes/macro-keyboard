@@ -9,11 +9,11 @@ const executeProcess = (command, { unref } = { unref: true }) => {
 };
 
 const ACTIONS = {
-  7: () => executeProcess('echo "Testando" > teste.txt'),
-  8: () => executeProcess("librewolf"),
-  9: () => executeProcess("playerctl previous"),
-  10: () => executeProcess("playerctl play-pause"),
-  11: () => executeProcess("playerctl next"),
+  0: () => executeProcess('echo "Testando" > teste.txt'),
+  1: () => executeProcess("librewolf"),
+  2: () => executeProcess("playerctl previous"),
+  3: () => executeProcess("playerctl play-pause"),
+  4: () => executeProcess("playerctl next"),
 };
 
 const port = new SerialPort({

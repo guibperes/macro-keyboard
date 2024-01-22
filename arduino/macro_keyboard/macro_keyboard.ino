@@ -4,6 +4,7 @@
 
 struct button {
   byte pin;
+  byte number;
   long last_press;
 };
 
@@ -20,6 +21,7 @@ void setup() {
     byte pin = BUTTON_FIRST_PIN + i;
 
     buttons[i].pin = pin;
+    buttons[i].number = i;
     buttons[i].last_press = BUTTON_PRESS_TIME;
 
     pinMode(pin, INPUT_PULLUP);
@@ -31,7 +33,7 @@ void loop() {
     bool button_state = digitalRead(buttons[i].pin);
 
     if (check_button_last_press(buttons[i]) && button_state == LOW) {
-      Serial.write(buttons[i].pin);
+      Serial.write(buttons[i].number);
       buttons[i].last_press = millis();
     }
   }
