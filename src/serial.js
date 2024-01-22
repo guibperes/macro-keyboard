@@ -10,7 +10,7 @@ export const getSerialPort = () =>
     baudRate: config.baudRate,
   });
 
-export const getByteParser = () => new ByteLengthParser({ length: 2 });
+export const getByteParser = () => new ByteLengthParser({ length: 3 });
 
 export const onOpen = () =>
   console.log(`Connected on serial device ${config.serialPort}`);
