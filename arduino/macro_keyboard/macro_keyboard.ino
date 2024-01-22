@@ -2,23 +2,6 @@
 #include "button.h"
 #include "knob.h"
 
-input buttons[BUTTON_QUANTITY];
-input analogs[KNOB_QUANTITY];
-
-void button_input_setup() {
-  for (byte i = 0; i < BUTTON_QUANTITY; i++) {
-    byte pin = BUTTON_FIRST_PIN + i;
-
-    buttons[i].pin = pin;
-    buttons[i].number = i;
-    buttons[i].type = BUTTON_TYPE;
-    buttons[i].last_read = 0;
-    buttons[i].last_millis = BUTTON_PRESS_TIME;
-
-    pinMode(pin, INPUT_PULLUP);
-  }
-}
-
 void button_input_loop() {
   for (byte i = 0; i < BUTTON_QUANTITY; i++) {
     buttons[i].last_read = digitalRead(buttons[i].pin);
