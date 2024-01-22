@@ -8,6 +8,11 @@ const executeProcess = (command, { unref } = { unref: true }) => {
   if (unref) subprocess.unref();
 };
 
+const runByteCommand = (data) => {
+  const actionNumber = Number.parseInt(data.toString("hex"), 16);
+  ACTIONS[actionNumber]();
+};
+
 const ACTIONS = [
   () => executeProcess('echo "Testando" > teste.txt'),
   () => executeProcess("librewolf"),
@@ -23,10 +28,5 @@ const port = new SerialPort({
 });
 
 port.pipe(new ByteLengthParser({ length: 1 }));
-
-port.on("data", (data) => {
-  const actionNumber = Number.parseInt(data.toString("hex"), 16);
-  ACTIONS[actionNumber]();
-});
-
+port.on("data", runByteCommand);
 port.open(() => console.log("Connected on serial device"));
