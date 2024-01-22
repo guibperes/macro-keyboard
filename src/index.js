@@ -2,11 +2,9 @@ import { exec } from "node:child_process";
 import { ByteLengthParser, SerialPort } from "serialport";
 import config from "./config.json" assert { type: "json" };
 
-const executeProcess = (command, { unref } = { unref: true }) => {
+const executeProcess = (command) => {
   console.log(`Executing command: ${command}`);
-  const subprocess = exec(command);
-
-  if (unref) subprocess.unref();
+  exec(command).unref();
 };
 
 const runByteCommand = (data) => {

@@ -5,6 +5,7 @@
     "echo \"Testando\" > teste.txt",
     "librewolf",
     "playerctl previous",
-    "playerctl play-pause"
+    "playerctl play-pause",
+    "playerctl next"
   ]
 }
