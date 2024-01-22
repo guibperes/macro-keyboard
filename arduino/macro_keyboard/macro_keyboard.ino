@@ -4,8 +4,11 @@
 #define BUTTON_PRESS_TIME 200
 
 #define KNOB_TYPE 1
+#define KNOB_QUANTITY 1
 #define KNOB_MILLIS_DELAY 200
 #define KNOB_READ_DELAY 10
+
+static const byte analog_pins[] = { A0, A1, A2, A3, A4, A5 };
 
 typedef enum {
   BUTTON_PUSH = 0,
@@ -22,7 +25,7 @@ struct input {
 };
 
 input buttons[BUTTON_QUANTITY];
-input analogs[1];
+input analogs[KNOB_QUANTITY];
 
 bool check_input_last_millis(input button, long millis_timeout) {
   return millis() - button.last_millis >= millis_timeout;
@@ -66,29 +69,26 @@ byte compare_analog_value(byte first, byte second) {
   else return 1;
 }
 
-void setup() {
-  Serial.begin(9600);
-  button_input_setup();
-
-  analogs[0].pin = A0;
-  analogs[0].number = 0;
-  analogs[0].type = KNOB_TYPE;
-  analogs[0].last_read = mapAnalogRead(analogs[0].pin);
-  analogs[0].last_millis = KNOB_MILLIS_DELAY;
+void knob_input_setup() {
+  for (byte i = 0; i < KNOB_QUANTITY; i++) {
+    analogs[i].pin = analog_pins[i];
+    analogs[i].number = i;
+    analogs[i].type = KNOB_TYPE;
+    analogs[i].last_read = mapAnalogRead(analogs[i].pin);
+    analogs[i].last_millis = KNOB_MILLIS_DELAY;
+  }
 }
 
-void loop() {
-  button_input_loop();
-
+void knob_input_loop() {
   for (byte i = 0; i < 1; i++) {
-    if (!check_input_last_millis(analogs[0], KNOB_MILLIS_DELAY)) continue;
+    if (!check_input_last_millis(analogs[i], KNOB_MILLIS_DELAY)) continue;
 
-    byte analog_read = mapAnalogRead(analogs[0].pin);
-    byte analog_read_diff = analogs[0].last_read >= analog_read ? analogs[0].last_read - analog_read : analog_read - analogs[0].last_read;
+    byte analog_read = mapAnalogRead(analogs[i].pin);
+    byte analog_read_diff = analogs[i].last_read >= analog_read ? analogs[i].last_read - analog_read : analog_read - analogs[i].last_read;
 
     if (analog_read_diff < KNOB_READ_DELAY) continue;
 
-    switch (compare_analog_value(analogs[0].last_read, analog_read)) {
+    switch (compare_analog_value(analogs[i].last_read, analog_read)) {
       case 0:
         Serial.write(analogs[i].type);
         Serial.write(analogs[i].number);
@@ -102,7 +102,19 @@ void loop() {
         break;
     }
 
-    analogs[0].last_read = analog_read;
-    analogs[0].last_millis = millis();
+    analogs[i].last_read = analog_read;
+    analogs[i].last_millis = millis();
   }
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  button_input_setup();
+  knob_input_setup();
+}
+
+void loop() {
+  button_input_loop();
+  knob_input_loop();
 }
