@@ -1,8 +1,9 @@
 {
   "serialPort": "/dev/ttyACM0",
   "baudRate": 9600,
+  "disabledString": "DISABLED",
   "commands": [
-    "echo \"Testando\" > teste.txt",
+    "DISABLED",
     "librewolf",
     "playerctl previous",
     "playerctl play-pause",

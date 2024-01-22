@@ -2,8 +2,8 @@ import { exec } from "node:child_process";
 import { ByteLengthParser, SerialPort } from "serialport";
 import config from "./config.json" assert { type: "json" };
 
-const executeProcess = (command) => {
-  console.log(`Executing command: ${command}`);
+const executeProcess = (command, buttonByte) => {
+  console.log(`Executing command in button ${buttonByte}: ${command}`);
   exec(command).unref();
 };
 
@@ -14,7 +14,11 @@ const runByteCommand = (data) => {
   if (commandFunction) commandFunction();
 };
 
-const ACTIONS = config.commands.map((command) => () => executeProcess(command));
+const ACTIONS = config.commands.map((command, buttonByte) =>
+  command === config.disabledString
+    ? () => console.log(`Disabled command in button ${buttonByte}`)
+    : () => executeProcess(command, buttonByte)
+);
 
 const port = new SerialPort({
   autoOpen: false,
