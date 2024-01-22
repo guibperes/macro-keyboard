@@ -1,0 +1,14 @@
+{
+  "name": "macro_keyboard",
+  "version": "1.0.0",
+  "description": "Macro keyboard with arduino with serial communication",
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "serialport": "^12.0.0"
+  }
+}
