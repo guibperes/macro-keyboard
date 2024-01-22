@@ -30,16 +30,6 @@ void button_input_loop() {
   }
 }
 
-byte mapAnalogRead(byte pin) {
-  return map(analogRead(pin), 0, 1023, 0, 100);
-}
-
-byte compare_analog_value(byte first, byte second) {
-  if (first > second) return 0;
-  else if (first < second) return 2;
-  else return 1;
-}
-
 void knob_input_setup() {
   for (byte i = 0; i < KNOB_QUANTITY; i++) {
     analogs[i].pin = ANALOG_PINS[i];
