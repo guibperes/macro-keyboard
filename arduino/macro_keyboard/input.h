@@ -15,4 +15,14 @@ struct input {
   long last_millis;
 };
 
+bool check_input_last_millis(input input_device, long millis_timeout) {
+  return millis() - input_device.last_millis >= millis_timeout;
+}
+
+void write_bytes_serial(input input_device, input_action action) {
+  Serial.write(input_device.type);
+  Serial.write(input_device.number);
+  Serial.write(action);
+}
+
 #endif

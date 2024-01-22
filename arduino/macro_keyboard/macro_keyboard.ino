@@ -5,16 +5,6 @@
 input buttons[BUTTON_QUANTITY];
 input analogs[KNOB_QUANTITY];
 
-bool check_input_last_millis(input input_device, long millis_timeout) {
-  return millis() - input_device.last_millis >= millis_timeout;
-}
-
-void write_bytes_serial(input input_device, input_action action) {
-  Serial.write(input_device.type);
-  Serial.write(input_device.number);
-  Serial.write(action);
-}
-
 void button_input_setup() {
   for (byte i = 0; i < BUTTON_QUANTITY; i++) {
     byte pin = BUTTON_FIRST_PIN + i;
