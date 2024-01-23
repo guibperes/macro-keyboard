@@ -11,6 +11,6 @@
   ],
   "knobCommands": [
     ["kitty", "librewolf"],
-    ["playerctl previous", "playerctl next"]
+    ["KEYBOARD control+pageup", "KEYBOARD control+pagedown"]
   ]
 }

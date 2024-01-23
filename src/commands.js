@@ -1,11 +1,20 @@
 import { exec } from "node:child_process";
 import { homedir } from "node:os";
 import { getConfigs } from "./config.js";
+import { keyCommand } from "./keyboard.js";
 
 const config = getConfigs();
 
 const actionTypes = ["BUTTON", "KNOB"];
 const knobActions = ["PREV", "NEXT"];
+
+const resolveCommandType = (command = "") => {
+  return command === "DISABLED"
+    ? "DISABLED"
+    : command.startsWith("KEYBOARD")
+    ? "KEYBOARD"
+    : "COMMAND";
+};
 
 const executeProcess = ({ command, type, indexByte, action }) => {
   const logMessage = action
@@ -17,28 +26,48 @@ const executeProcess = ({ command, type, indexByte, action }) => {
 };
 
 export const getMappedButtonCommands = () =>
-  config.buttonCommands.map((command, indexByte) =>
-    command === config.disabledString
-      ? () => console.log(`Disabled command in BUTTON ${indexByte}`)
-      : () => executeProcess({ command, indexByte, type: "BUTTON" })
-  );
+  config.buttonCommands.map((command, indexByte) => {
+    const type = "BUTTON";
+
+    switch (resolveCommandType(command)) {
+      case "DISABLED":
+        return () => console.log(`Disabled command in BUTTON ${indexByte}`);
+
+      case "KEYBOARD":
+        return () =>
+          keyCommand({ type, indexByte, keys: command.split(" ")[1] });
+
+      case "COMMAND":
+        return () => executeProcess({ command, indexByte, type });
+    }
+  });
 
 export const getMappedKnobCommands = () =>
   config.knobCommands.map((knob, indexByte) =>
-    knob.map((command, actionIndex) =>
-      command === config.disabledString
-        ? () =>
+    knob.map((command, actionIndex) => {
+      const type = "KNOB";
+      const action = knobActions[actionIndex];
+
+      switch (resolveCommandType(command)) {
+        case "DISABLED":
+          return () =>
             console.log(
-              `Disabled command in KNOB ${indexByte} with action ${knobActions[actionIndex]}`
-            )
-        : () =>
-            executeProcess({
-              command,
+              `Disabled command in KNOB ${indexByte} with action ${action}`
+            );
+
+        case "KEYBOARD":
+          return () =>
+            keyCommand({
+              type,
               indexByte,
-              type: "KNOB",
-              action: knobActions[actionIndex],
-            })
-    )
+              action,
+              keys: command.split(" ")[1],
+            });
+
+        case "COMMAND":
+          return () => executeProcess({ command, indexByte, type, action });
+      }
+    })
   );
 
 export const runByteCommand = (commands) => (data) => {
