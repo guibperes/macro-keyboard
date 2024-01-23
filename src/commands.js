@@ -9,7 +9,7 @@ const actionTypes = ["BUTTON", "KNOB"];
 const knobActions = ["PREV", "NEXT"];
 
 const resolveCommandType = (command = "") => {
-  return command === "DISABLED"
+  return command === config.disabledString
     ? "DISABLED"
     : command.startsWith("KEYBOARD")
     ? "KEYBOARD"
