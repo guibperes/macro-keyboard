@@ -22,4 +22,15 @@ void button_input_setup() {
   }
 }
 
+void button_input_loop() {
+  for (byte i = 0; i < BUTTON_QUANTITY; i++) {
+    buttons[i].last_read = digitalRead(buttons[i].pin);
+
+    if (!check_input_last_millis(buttons[i], BUTTON_PRESS_TIME) || buttons[i].last_read == HIGH) continue;
+
+    write_bytes_serial(buttons[i], BUTTON_PUSH);
+    buttons[i].last_millis = millis();
+  }
+}
+
 #endif
