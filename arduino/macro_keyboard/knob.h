@@ -2,7 +2,7 @@
 #define knob_h
 
 static const byte KNOB_TYPE = 1;
-static const byte KNOB_QUANTITY = 1;
+static const byte KNOB_QUANTITY = 2;
 static const byte KNOB_MILLIS_DELAY = 200;
 static const byte KNOB_READ_DELAY = 10;
 static const byte ANALOG_PINS[] = { A0, A1, A2, A3, A4, A5 };
@@ -36,7 +36,7 @@ void knob_input_setup() {
 }
 
 void knob_input_loop() {
-  for (byte i = 0; i < 1; i++) {
+  for (byte i = 0; i < KNOB_QUANTITY; i++) {
     if (!check_input_last_millis(analogs[i], KNOB_MILLIS_DELAY)) continue;
 
     byte analog_read = mapAnalogRead(analogs[i].pin);

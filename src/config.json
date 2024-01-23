@@ -9,5 +9,8 @@
     "playerctl play-pause",
     "playerctl next"
   ],
-  "knobCommands": [["kitty", "librewolf"]]
+  "knobCommands": [
+    ["kitty", "librewolf"],
+    ["playerctl previous", "playerctl next"]
+  ]
 }
